@@ -48,6 +48,8 @@ The goal: To notify clients of changes to application server state in a reliable
 
 # Definitions
 
+{:br: vspace="0"}
+
 PushServer
 : A publicly accessible server that implements the server side of the Push Protocol and exposes an HTTP API for AppServer's to notify it.
 
@@ -73,6 +75,7 @@ and UserAgent and App should use this only for detecting changes. MUST be expose
 
 Application
 : A program which requires access to push notifications. The UserAgent acts on behalf of applications.
+{: br}
 
 # Protocol Overview
 
@@ -127,8 +130,9 @@ It is RECOMMENDED that Endpoints simply be a prefix followed by the channelID or
 
 All messages are encoded as JSON. All messages MUST have the following fields:
 
-;messageType *string*
-:Defines the message type
+messageType (string)
+: Defines the message type
+{: br}
 
 ## Handshake
 
@@ -159,14 +163,20 @@ requests to the PushServer until the handshake is completed.
 
 ### UserAgent -> PushServer
 
-; messageType = "hello"
+messageType = "hello"
+
 : Begin handshake
 
-; uaid string (REQUIRED)
+uaid string (REQUIRED)
+
 : If the UserAgent has a previously assigned UAID, it should send it. Otherwise send an empty string.
 
-; channelIDs list of strings (REQUIRED)
+channelIDs list of strings (REQUIRED)
+
 : If the UserAgent has a list of channelIDs it wants to be notified of, it must pass these, otherwise an empty list.
+{: br}
+
+
 
 Extra fields:
 The UserAgent MAY pass any extra JSON data to the PushServer. This data may include information required to wake up the UserAgent out-of-band. The PushServer MAY ignore this data.
@@ -187,11 +197,14 @@ The UserAgent MAY pass any extra JSON data to the PushServer. This data may incl
 PushServers MUST only respond to a hello once.
 UserAgents MUST ignore multiple hello replies.
 
-; messageType = "hello"
+messageType = "hello"
 : Responses generally have the same messageType as the request
 
-; uaid string (REQUIRED)
+uaid string (REQUIRED)
 : If the UserAgent sent no UAID, generate a new one. If the UserAgent send a valid UAID and the PushServer is in sync with the UserAgent, send back the same UAID, otherwise the PushServer should generate a new UAID.
+{: br}
+
+
 
 #### Example
 
@@ -234,19 +247,20 @@ NOTE: The register call is made by the UserAgent on behalf of an application. Th
 
 ### PushServer -> UserAgent
 
-;messageType = "register"
+messageType = "register"
 
-;channelID string (REQUIRED)
+channelID string (REQUIRED)
 :This MUST be the same as the channelID sent by the UserAgent in the register request that this message is a response to.
 
-;status number (REQUIRED)
+status number (REQUIRED)
 : Used to indicate success/failure. MUST be one of:
 * 200 - OK. Success. Idempotent: If the PushServer receives a register for the same channelID from a UserAgent which already has a registration for the channelID, it should still respond with success.
 * 409 - Conflict. The chosen ChannelID is already in use and NOT associated with this UserAgent. UserAgent SHOULD retry with a new ChannelID as soon as possible.
 * 500 - Internal server error. Database out of space or offline. Disk space full or whatever other reason due to which the PushServer could not grant this registration. UserAgent SHOULD avoid retrying immediately.
 
-;pushEndpoint string (REQUIRED)
+pushEndpoint string (REQUIRED)
 : Should be the URL sent to the application by the UserAgent. AppServers will contact the PushServer at this URL to update the version of the channel identified by channelID.
+{: br}
 
 #### Example
 
@@ -289,10 +303,11 @@ When an App calls `unregister(endpoint)` it is RECOMMENDED that the UserAgent fo
 
 ### UserAgent -> PushServer
 
-;messageType = "unregister"
+messageType = "unregister"
 
-;channelID string (REQUIRED)
+channelID string (REQUIRED)
 : This is sort of obvious isn't it? :)
+{: br}
 
 #### Example
 
@@ -305,15 +320,16 @@ When an App calls `unregister(endpoint)` it is RECOMMENDED that the UserAgent fo
 
 ### PushServer -> UserAgent
 
-;messageType = "unregister"
+messageType = "unregister"
 
 channelID string (REQUIRED)
-:This MUST be the same as the channelID sent by the UserAgent in the unregister request that this message is a response to.
+: This MUST be the same as the channelID sent by the UserAgent in the unregister request that this message is a response to.
 
 status number (REQUIRED)
 : Used to indicate success/failure. MUST be one of:
   * 200 - OK. Success. Idempotent: If the PushServer receives a unregister for a non-existent channelID it should respond with success. If the channelID is associated with a DIFFERENT UAID, it MUST NOT delete the channelID, but still MUST respond with success to this UserAgent.
 * 500 - Internal server error. Database offline or whatever other reason due to which the PushServer could not grant this unregistration. UserAgent SHOULD avoid retrying immediately.
+{: br}
 
 #### Example
 
@@ -366,10 +382,11 @@ unacknowledged notification is updated, the PushServer MAY queue up a new
 notification for this channelID and the new version, and remove the old
 notification from the pending queue.
 
-;messageType: "notification"
+messageType: "notification"
 
-;updates list  REQUIRED
-:The list contains one or more {"channelID": "id", "version": N } pairs.
+updates list  REQUIRED
+: The list contains one or more {"channelID": "id", "version": N } pairs.
+{: br}
 
 ##### Example
 
@@ -388,10 +405,11 @@ notification from the pending queue.
 
 It is RECOMMENDED that the UserAgent try to batch all pending acknowledgements into fewer messages.
 
-;messageType: "ack"
+messageType ="ack"
 
-;updates list
-The list contains one or more {"channelID": channelID, "version": N} pairs.
+updates list
+: The list contains one or more {"channelID": channelID, "version": N} pairs.
+{: br}
 
 ##### Example
 
