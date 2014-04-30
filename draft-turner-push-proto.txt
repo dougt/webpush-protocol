@@ -1,6 +1,7 @@
 
 
 
+
 Network Working Group                                          D. Turner
 Internet-Draft                                                   Mozilla
 Intended status: Standards Track                          April 29, 2014
@@ -15,8 +16,8 @@ Abstract
    This page describes the protocol used for communication by the
    PushServer and the UserAgent.
 
-   A reference server is available on
-   [https://github.com/dougt/go-push-server github].
+   A reference server is available on [https://github.com/dougt/go-push-
+   server github].
 
 Status of This Memo
 
@@ -71,35 +72,35 @@ Internet-Draft                     SPP                        April 2014
 
 Table of Contents
 
-   1.  Introduction . . . . . . . . . . . . . . . . . . . . . . . . .  3
-   2.  Definitions  . . . . . . . . . . . . . . . . . . . . . . . . .  3
-   3.  Protocol Overview  . . . . . . . . . . . . . . . . . . . . . .  4
-   4.  Considerations . . . . . . . . . . . . . . . . . . . . . . . .  4
-   5.  ChannelID, UAIDs and Endpoint  . . . . . . . . . . . . . . . .  5
-   6.  Messages . . . . . . . . . . . . . . . . . . . . . . . . . . .  6
-     6.1.  Handshake  . . . . . . . . . . . . . . . . . . . . . . . .  6
-       6.1.1.  UserAgent -> PushServer  . . . . . . . . . . . . . . .  7
-       6.1.2.  PushServer -> UserAgent  . . . . . . . . . . . . . . .  7
-     6.2.  Register . . . . . . . . . . . . . . . . . . . . . . . . .  8
-       6.2.1.  UserAgent -> PushServer  . . . . . . . . . . . . . . .  8
-       6.2.2.  PushServer -> UserAgent  . . . . . . . . . . . . . . .  8
-     6.3.  Unregister . . . . . . . . . . . . . . . . . . . . . . . .  9
-       6.3.1.  UserAgent -> PushServer  . . . . . . . . . . . . . . . 10
-       6.3.2.  PushServer -> UserAgent  . . . . . . . . . . . . . . . 10
-     6.4.  Ping . . . . . . . . . . . . . . . . . . . . . . . . . . . 11
-       6.4.1.  UserAgent -> PushServer  . . . . . . . . . . . . . . . 11
-       6.4.2.  PushServer -> UserAgent  . . . . . . . . . . . . . . . 11
-     6.5.  Notification . . . . . . . . . . . . . . . . . . . . . . . 11
-       6.5.1.  AppServer -> PushServer  . . . . . . . . . . . . . . . 11
-       6.5.2.  PushServer -> AppServer  . . . . . . . . . . . . . . . 12
-       6.5.3.  PushServer -> UserAgent  . . . . . . . . . . . . . . . 12
-   7.  Synchronization of server and client state . . . . . . . . . . 13
-   8.  Achieving reliable delivery  . . . . . . . . . . . . . . . . . 13
-   9.  Garbage collection . . . . . . . . . . . . . . . . . . . . . . 13
-   10. Alternative communication  . . . . . . . . . . . . . . . . . . 14
-   11. Security Considerations  . . . . . . . . . . . . . . . . . . . 14
-   12. IANA Considerations  . . . . . . . . . . . . . . . . . . . . . 14
-   13. Normative References . . . . . . . . . . . . . . . . . . . . . 14
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
+   2.  Definitions . . . . . . . . . . . . . . . . . . . . . . . . .   3
+   3.  Protocol Overview . . . . . . . . . . . . . . . . . . . . . .   4
+   4.  Considerations  . . . . . . . . . . . . . . . . . . . . . . .   4
+   5.  ChannelID, UAIDs and Endpoint . . . . . . . . . . . . . . . .   5
+   6.  Messages  . . . . . . . . . . . . . . . . . . . . . . . . . .   6
+     6.1.  Handshake . . . . . . . . . . . . . . . . . . . . . . . .   6
+       6.1.1.  UserAgent -> PushServer . . . . . . . . . . . . . . .   7
+       6.1.2.  PushServer -> UserAgent . . . . . . . . . . . . . . .   7
+     6.2.  Register  . . . . . . . . . . . . . . . . . . . . . . . .   8
+       6.2.1.  UserAgent -> PushServer . . . . . . . . . . . . . . .   8
+       6.2.2.  PushServer -> UserAgent . . . . . . . . . . . . . . .   8
+     6.3.  Unregister  . . . . . . . . . . . . . . . . . . . . . . .   9
+       6.3.1.  UserAgent -> PushServer . . . . . . . . . . . . . . .  10
+       6.3.2.  PushServer -> UserAgent . . . . . . . . . . . . . . .  10
+     6.4.  Ping  . . . . . . . . . . . . . . . . . . . . . . . . . .  11
+       6.4.1.  UserAgent -> PushServer . . . . . . . . . . . . . . .  11
+       6.4.2.  PushServer -> UserAgent . . . . . . . . . . . . . . .  11
+     6.5.  Notification  . . . . . . . . . . . . . . . . . . . . . .  11
+       6.5.1.  AppServer -> PushServer . . . . . . . . . . . . . . .  11
+       6.5.2.  PushServer -> AppServer . . . . . . . . . . . . . . .  12
+       6.5.3.  PushServer -> UserAgent . . . . . . . . . . . . . . .  12
+   7.  Synchronization of server and client state  . . . . . . . . .  13
+   8.  Achieving reliable delivery . . . . . . . . . . . . . . . . .  13
+   9.  Garbage collection  . . . . . . . . . . . . . . . . . . . . .  13
+   10. Alternative communication . . . . . . . . . . . . . . . . . .  14
+   11. Security Considerations . . . . . . . . . . . . . . . . . . .  14
+   12. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  14
+   13. Normative References  . . . . . . . . . . . . . . . . . . . .  14
 
 
 
@@ -160,7 +161,7 @@ Internet-Draft                     SPP                        April 2014
    Version
       Monotonically increasing 64-bit integer describing the application
       state.  This holds meaning as a primary key or similar only to the
-      AppServer.  The PushServer and UserAgent and App should use this
+
 
 
 
@@ -169,6 +170,7 @@ Turner                  Expires October 31, 2014                [Page 3]
 Internet-Draft                     SPP                        April 2014
 
 
+      AppServer.  The PushServer and UserAgent and App should use this
       only for detecting changes.  MUST be exposed to applications.
 
    Application
@@ -183,10 +185,9 @@ Internet-Draft                     SPP                        April 2014
 
    The SimplePush communication channel is WebSockets, and the wire
    protocol is JSON, with messages defined below.  The WebSocket
-   specific HTTP header "Sec-WebSocket-Protocol" MUST be set to
-   "push-notification" by the UserAgent.  The PushServer SHOULD reject
-   the connection if the header is not set.  (FIXME: MUST/SHOULD
-   paradox?)
+   specific HTTP header "Sec-WebSocket-Protocol" MUST be set to "push-
+   notification" by the UserAgent.  The PushServer SHOULD reject the
+   connection if the header is not set.  (FIXME: MUST/SHOULD paradox?)
 
    All messages MUST use TLS (wss:// protocol for WebSockets).  In
    addition, Endpoints generated by PushServer's MUST use HTTPS URLs.
@@ -439,8 +440,8 @@ Internet-Draft                     SPP                        April 2014
 
    messageType = "register"
 
-   channelID string (REQUIRED) :This MUST be the same as the channelID
-   sent by the UserAgent in the register request that this message is a
+
+
 
 
 
@@ -449,6 +450,8 @@ Turner                  Expires October 31, 2014                [Page 8]
 Internet-Draft                     SPP                        April 2014
 
 
+   channelID string (REQUIRED) :This MUST be the same as the channelID
+   sent by the UserAgent in the register request that this message is a
    response to.
 
    status number (REQUIRED)
@@ -456,12 +459,13 @@ Internet-Draft                     SPP                        April 2014
       Success.  Idempotent: If the PushServer receives a register for
       the same channelID from a UserAgent which already has a
       registration for the channelID, it should still respond with
-      success. * 409 - Conflict.  The chosen ChannelID is already in use
-      and NOT associated with this UserAgent.  UserAgent SHOULD retry
-      with a new ChannelID as soon as possible. * 500 - Internal server
-      error.  Database out of space or offline.  Disk space full or
-      whatever other reason due to which the PushServer could not grant
-      this registration.  UserAgent SHOULD avoid retrying immediately.
+      success.  * 409 - Conflict.  The chosen ChannelID is already in
+      use and NOT associated with this UserAgent.  UserAgent SHOULD
+      retry with a new ChannelID as soon as possible.  * 500 - Internal
+      server error.  Database out of space or offline.  Disk space full
+      or whatever other reason due to which the PushServer could not
+      grant this registration.  UserAgent SHOULD avoid retrying
+      immediately.
 
    pushEndpoint string (REQUIRED)
       Should be the URL sent to the application by the UserAgent.
@@ -493,10 +497,7 @@ Internet-Draft                     SPP                        April 2014
    AppServer need not have some sort of garbage collection mechanism to
    clean up endpoints at intervals of time.
 
-   The PushServer MUST implement unregister, but need not rely on it.
-   Well behaved AppServers will stop notifying it of unregistered
-   endpoints automatically.  Well behaved UserAgents won't notify their
-   apps of unregistered updates either.  So the PushServer can continue
+
 
 
 
@@ -505,6 +506,10 @@ Turner                  Expires October 31, 2014                [Page 9]
 Internet-Draft                     SPP                        April 2014
 
 
+   The PushServer MUST implement unregister, but need not rely on it.
+   Well behaved AppServers will stop notifying it of unregistered
+   endpoints automatically.  Well behaved UserAgents won't notify their
+   apps of unregistered updates either.  So the PushServer can continue
    to process notifications and pass them on to UserAgents, when it has
    not been told about the unregistration.
 
@@ -547,11 +552,7 @@ Internet-Draft                     SPP                        April 2014
       a non-existent channelID it should respond with success.  If the
       channelID is associated with a DIFFERENT UAID, it MUST NOT delete
       the channelID, but still MUST respond with success to this
-      UserAgent. * 500 - Internal server error.  Database offline or
-      whatever other reason due to which the PushServer could not grant
-      this unregistration.  UserAgent SHOULD avoid retrying immediately.
-
-
+      UserAgent.  * 500 - Internal server error.  Database offline or
 
 
 
@@ -560,6 +561,9 @@ Turner                  Expires October 31, 2014               [Page 10]
 
 Internet-Draft                     SPP                        April 2014
 
+
+      whatever other reason due to which the PushServer could not grant
+      this unregistration.  UserAgent SHOULD avoid retrying immediately.
 
 6.3.2.1.  Example
 
@@ -605,10 +609,7 @@ Internet-Draft                     SPP                        April 2014
    The AppServer MUST make a HTTP _PUT_ request to the Endpoint received
    from the App.
 
-   If no request body is present, the server MAY presume the version to
-   be the current server UTC.
 
-   If the request body is present, the request MUST contain the string
 
 
 
@@ -617,8 +618,12 @@ Turner                  Expires October 31, 2014               [Page 11]
 Internet-Draft                     SPP                        April 2014
 
 
-   "version=N" and the Content-Type MUST be
-   "application/x-www-form-urlencoded".
+   If no request body is present, the server MAY presume the version to
+   be the current server UTC.
+
+   If the request body is present, the request MUST contain the string
+   "version=N" and the Content-Type MUST be "application/x-www-form-
+   urlencoded".
 
 6.5.2.  PushServer -> AppServer
 
@@ -658,12 +663,8 @@ Internet-Draft                     SPP                        April 2014
            "version": 42 } ]
      }
 
-6.5.3.2.  UserAgent -> PushServer
 
-   It is RECOMMENDED that the UserAgent try to batch all pending
-   acknowledgements into fewer messages.
 
-   messageType ="ack"
 
 
 
@@ -672,6 +673,13 @@ Turner                  Expires October 31, 2014               [Page 12]
 
 Internet-Draft                     SPP                        April 2014
 
+
+6.5.3.2.  UserAgent -> PushServer
+
+   It is RECOMMENDED that the UserAgent try to batch all pending
+   acknowledgements into fewer messages.
+
+   messageType ="ack"
 
    updates list
       The list contains one or more {"channelID": channelID, "version":
@@ -714,13 +722,6 @@ Internet-Draft                     SPP                        April 2014
    The PushServer MUST NOT delete channelIDs without deleting the
    associated UAID, except when one of the following occurs:
 
-   -  The UserAgent explicitly sends an unregister message.
-
-   -  or, When a previously known UserAgent reconnects, in the handshake
-      it will transmit channelIDs which are registered on the
-      UserAgent's side.  If the PushServer finds that it has
-      registrations for channelIDs that are not in the list transmitted
-      by the UserAgent, it may delete these extra channelIDs.
 
 
 
@@ -728,6 +729,14 @@ Turner                  Expires October 31, 2014               [Page 13]
 
 Internet-Draft                     SPP                        April 2014
 
+
+   -  The UserAgent explicitly sends an unregister message.
+
+   -  or, When a previously known UserAgent reconnects, in the handshake
+      it will transmit channelIDs which are registered on the
+      UserAgent's side.  If the PushServer finds that it has
+      registrations for channelIDs that are not in the list transmitted
+      by the UserAgent, it may delete these extra channelIDs.
 
 10.  Alternative communication
 
@@ -772,13 +781,4 @@ Author's Address
 
 
 
-
-
-
-
-
-
-
-
 Turner                  Expires October 31, 2014               [Page 14]
-
