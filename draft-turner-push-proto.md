@@ -1,5 +1,5 @@
 ---
-title: Simply Push Protocol
+title: WebPush Protocol
 abbrev: SPP
 docname: draft-turner-push-proto-latest
 date: 2014

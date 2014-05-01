@@ -9,7 +9,7 @@ Expires: November 2, 2014                                        Mozilla
                                                              May 1, 2014
 
 
-                          Simply Push Protocol
+                            WebPush Protocol
                      draft-turner-push-proto-latest
 
 Abstract
@@ -79,9 +79,9 @@ Table of Contents
      4.1.  Handshake . . . . . . . . . . . . . . . . . . . . . . . .   4
        4.1.1.  UserAgent -> WebPushServer  . . . . . . . . . . . . .   4
        4.1.2.  WebPushServer -> UserAgent  . . . . . . . . . . . . .   5
-     4.2.  Register  . . . . . . . . . . . . . . . . . . . . . . . .   5
+     4.2.  Register  . . . . . . . . . . . . . . . . . . . . . . . .   6
        4.2.1.  UserAgent -> WebPushServer  . . . . . . . . . . . . .   6
-       4.2.2.  WebPushServer -> UserAgent  . . . . . . . . . . . . .   6
+       4.2.2.  WebPushServer -> UserAgent  . . . . . . . . . . . . .   7
      4.3.  Unregister  . . . . . . . . . . . . . . . . . . . . . . .   7
        4.3.1.  UserAgent -> WebPushServer  . . . . . . . . . . . . .   8
        4.3.2.  WebPushServer -> UserAgent  . . . . . . . . . . . . .   8
@@ -89,12 +89,12 @@ Table of Contents
        4.4.1.  UserAgent -> WebPushServer  . . . . . . . . . . . . .   9
        4.4.2.  WebPushServer -> UserAgent  . . . . . . . . . . . . .   9
      4.5.  Notification  . . . . . . . . . . . . . . . . . . . . . .   9
-       4.5.1.  AppServer -> WebPushServer  . . . . . . . . . . . . .   9
+       4.5.1.  AppServer -> WebPushServer  . . . . . . . . . . . . .  10
        4.5.2.  WebPushServer -> AppServer  . . . . . . . . . . . . .  10
        4.5.3.  WebPushServer -> UserAgent  . . . . . . . . . . . . .  10
    5.  Synchronization of server and client state  . . . . . . . . .  11
    6.  Achieving reliable delivery . . . . . . . . . . . . . . . . .  11
-   7.  Garbage collection  . . . . . . . . . . . . . . . . . . . . .  11
+   7.  Garbage collection  . . . . . . . . . . . . . . . . . . . . .  12
    8.  Alternative communication . . . . . . . . . . . . . . . . . .  12
    9.  Security Considerations . . . . . . . . . . . . . . . . . . .  12
    10. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  12
@@ -116,6 +116,8 @@ Internet-Draft                     SPP                          May 2014
 
    server state, and client driven recovery.  It is a signaling and and
    data carrying system.
+
+   [todo] intergrate auth
 
 2.  Definitions
 
@@ -160,8 +162,6 @@ Internet-Draft                     SPP                          May 2014
    specific HTTP header "Sec-WebSocket-Protocol" MUST be set to "push-
    notification" by the UserAgent.  The WebPushServer SHOULD reject the
    connection if the header is not set.
-
-
 
 
 
@@ -226,9 +226,9 @@ Turner, et al.          Expires November 2, 2014                [Page 4]
 Internet-Draft                     SPP                          May 2014
 
 
-   channelIDs list of strings (REQUIRED) :If the UserAgent has a list of
-   channelIDs it wants to be notified of, it must pass these, otherwise
-   an empty list.
+   channelIDs list of strings (REQUIRED)  If the UserAgent has a list of
+      channelIDs it wants to be notified of, it must pass these,
+      otherwise an empty list.
 
    Extra fields: The UserAgent MAY pass any extra JSON data to the
    WebPushServer.  This data may include information required to wake up
@@ -261,6 +261,8 @@ Internet-Draft                     SPP                          May 2014
       MUST disconnect on receiving this command and try reconnecting to
       the associated URL.
 
+   [todo] what kind of restrictions do we want to put on the redirect
+
 4.1.2.1.  Example
 
      {
@@ -268,12 +270,10 @@ Internet-Draft                     SPP                          May 2014
        "uaid": "fd52438f-1c49-41e0-a2e4-98e49833cc9c"
      }
 
-4.2.  Register
 
-   The Register message is used by the UserAgent to request that the
-   WebPushServer notify it when a channel changes.  Since channelIDs are
-   associated with only one UAID, this effectively creates the channel,
-   while unregister destroys the channel.
+
+
+
 
 
 
@@ -281,6 +281,13 @@ Turner, et al.          Expires November 2, 2014                [Page 5]
 
 Internet-Draft                     SPP                          May 2014
 
+
+4.2.  Register
+
+   The Register message is used by the UserAgent to request that the
+   WebPushServer notify it when a channel changes.  Since channelIDs are
+   associated with only one UAID, this effectively creates the channel,
+   while unregister destroys the channel.
 
    The channelID is chosen by the UserAgent because it also acts like a
    nonce for the Register message itself.  Because of this
@@ -320,15 +327,8 @@ Internet-Draft                     SPP                          May 2014
        "channelID": "d9b74644-4f97-46aa-b8fa-9393985cd6cd"
      }
 
-4.2.2.  WebPushServer -> UserAgent
 
-   messageType = "register"
 
-   channelID string (REQUIRED)
-      This MUST be the same as the channelID sent by the UserAgent in
-      the register request that this message is a response to.
-
-   status number (REQUIRED)
 
 
 
@@ -338,6 +338,15 @@ Turner, et al.          Expires November 2, 2014                [Page 6]
 Internet-Draft                     SPP                          May 2014
 
 
+4.2.2.  WebPushServer -> UserAgent
+
+   messageType = "register"
+
+   channelID string (REQUIRED)
+      This MUST be the same as the channelID sent by the UserAgent in
+      the register request that this message is a response to.
+
+   status number (REQUIRED)
       Used to indicate success/failure.  MUST be one of: * 200 - OK.
       Success.  Idempotent: If the WebPushServer receives a register for
       the same channelID from a UserAgent which already has a
@@ -377,6 +386,14 @@ Internet-Draft                     SPP                          May 2014
    The unregister is also useful to the AppServer, because it should
    stop sending notifications to an endpoint the App is no longer
    monitoring.  Even then, it is really an optimization so that the
+
+
+
+Turner, et al.          Expires November 2, 2014                [Page 7]
+
+Internet-Draft                     SPP                          May 2014
+
+
    AppServer need not have some sort of garbage collection mechanism to
    clean up endpoints at intervals of time.
 
@@ -386,13 +403,6 @@ Internet-Draft                     SPP                          May 2014
    apps of unregistered updates either.  So the WebPushServer can
    continue to process notifications and pass them on to UserAgents,
    when it has not been told about the unregistration.
-
-
-
-Turner, et al.          Expires November 2, 2014                [Page 7]
-
-Internet-Draft                     SPP                          May 2014
-
 
    When an App calls "unregister(endpoint)" it is RECOMMENDED that the
    UserAgent follow these steps:
@@ -432,16 +442,6 @@ Internet-Draft                     SPP                          May 2014
       Success.  Idempotent: If the WebPushServer receives a unregister
       for a non-existent channelID it should respond with success.  If
       the channelID is associated with a DIFFERENT UAID, it MUST NOT
-      delete the channelID, but still MUST respond with success to this
-      UserAgent.  * 500 - Internal server error.  Database offline or
-      whatever other reason due to which the WebPushServer could not
-      grant this unregistration.  UserAgent SHOULD avoid retrying
-      immediately.
-
-
-
-
-
 
 
 
@@ -449,6 +449,12 @@ Turner, et al.          Expires November 2, 2014                [Page 8]
 
 Internet-Draft                     SPP                          May 2014
 
+
+      delete the channelID, but still MUST respond with success to this
+      UserAgent.  * 500 - Internal server error.  Database offline or
+      whatever other reason due to which the WebPushServer could not
+      grant this unregistration.  UserAgent SHOULD avoid retrying
+      immediately.
 
 4.3.2.1.  Example
 
@@ -489,13 +495,7 @@ Internet-Draft                     SPP                          May 2014
 
 4.5.  Notification
 
-4.5.1.  AppServer -> WebPushServer
 
-   The AppServer MUST make a HTTP _PUT_ request to the Endpoint received
-   from the App.
-
-   If no request body is present, the server MAY presume the version to
-   be the current server UTC.
 
 
 
@@ -505,6 +505,16 @@ Turner, et al.          Expires November 2, 2014                [Page 9]
 
 Internet-Draft                     SPP                          May 2014
 
+
+4.5.1.  AppServer -> WebPushServer
+
+   [todo] add data to this.
+
+   The AppServer MUST make a HTTP _PUT_ request to the Endpoint received
+   from the App.
+
+   If no request body is present, the server MAY presume the version to
+   be the current server UTC.
 
    If the request body is present, the request MUST contain the string
    "version=N" and the Content-Type MUST be "application/x-www-form-
@@ -540,6 +550,18 @@ Internet-Draft                     SPP                          May 2014
       The list contains one or more {"channelID": "id", "version": N }
       pairs.
 
+
+
+
+
+
+
+
+Turner, et al.          Expires November 2, 2014               [Page 10]
+
+Internet-Draft                     SPP                          May 2014
+
+
 4.5.3.1.  Example
 
      {
@@ -552,15 +574,6 @@ Internet-Draft                     SPP                          May 2014
            "version": 42,
            "data": "Make the Internet work better" } ]
      }
-
-
-
-
-
-Turner, et al.          Expires November 2, 2014               [Page 10]
-
-Internet-Draft                     SPP                          May 2014
-
 
 4.5.3.2.  UserAgent -> WebPushServer
 
@@ -595,6 +608,16 @@ Internet-Draft                     SPP                          May 2014
    drop all state.  It MUST then disconnect all active clients, forcing
    them to reconnect and begin a handshake to get synchronized.
 
+
+
+
+
+
+Turner, et al.          Expires November 2, 2014               [Page 11]
+
+Internet-Draft                     SPP                          May 2014
+
+
 7.  Garbage collection
 
    The WebPushServer MAY perform occasional garbage collection to reduce
@@ -608,15 +631,6 @@ Internet-Draft                     SPP                          May 2014
    connects to the WebPushServer, it will be assigned a new UAID, the
    handshake will occur and Apps on the server will learn the latest
    version.
-
-
-
-
-
-Turner, et al.          Expires November 2, 2014               [Page 11]
-
-Internet-Draft                     SPP                          May 2014
-
 
    The WebPushServer MUST NOT delete channelIDs without deleting the
    associated UAID, except when one of the following occurs:
@@ -651,6 +665,15 @@ Internet-Draft                     SPP                          May 2014
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, March 1997.
 
+
+
+
+
+Turner, et al.          Expires November 2, 2014               [Page 12]
+
+Internet-Draft                     SPP                          May 2014
+
+
 Authors' Addresses
 
    Douglas Turner II
@@ -665,33 +688,10 @@ Authors' Addresses
    EMail: jrconlin@mozilla.com
 
 
-
-
-
-
-Turner, et al.          Expires November 2, 2014               [Page 12]
-
-Internet-Draft                     SPP                          May 2014
-
-
    Nikhil Marathe
    Mozilla
 
    EMail: nmarathe@mozilla.com
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
