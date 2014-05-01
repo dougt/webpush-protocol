@@ -194,6 +194,14 @@ uaid string (REQUIRED)
 valid UAID and the WebPushServer is in sync with the UserAgent, send back the
 same UAID, otherwise the WebPushServer should generate a new UAID.
 
+redirect string (OPTIONAL)
+
+: The WebPushServer may optionally request that the UserAgent reconnect to a
+different URL.  The UserAgent MUST disconnect on receiving this command and try
+reconnecting to the associated URL.
+
+[todo] what kind of restrictions do we want to put on the redirect
+ 
 {: br}
 
 
