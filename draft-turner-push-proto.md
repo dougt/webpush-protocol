@@ -59,6 +59,8 @@ be easy to implement, scalable, and robust.  The WebPush protocol enables
 application servers to delivery guarantees, minimal server state, and client
 driven recovery. It is a signaling and and data carrying system.
 
+[todo] intergrate auth
+ 
 # Definitions
 
 {:br: vspace="0"}
@@ -388,6 +390,8 @@ RECOMMENDED that the WebPushServer also reply with the string `{}`.
 ## Notification
 
 ### AppServer -> WebPushServer
+
+[todo] add data to this.
 
 The AppServer MUST make a HTTP *PUT* request to the Endpoint received from the
 App.
