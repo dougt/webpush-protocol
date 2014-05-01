@@ -28,6 +28,18 @@ author:
        organization: Mozilla
        email: dougt@mozilla.com
 
+ -
+       ins: J. Conlin
+       name: JR Conlin
+       organization: Mozilla
+       email: jrconlin@mozilla.com
+
+ -
+       ins: N.  Marathe
+       name: Nikhil Marathe
+       organization: Mozilla
+       email: nmarathe@mozilla.com
+
 normative:
   RFC2119:
 
