@@ -1,4 +1,3 @@
-
 WebPush Draft Specifications
 =============================
 
@@ -12,7 +11,7 @@ Contributing
 ------------
 
 1. The best way to provide feedback (editorial or design) and ask questions is
-sending an e-mail to [our mailing list](comming soon!).
+sending an e-mail to [our mailing list](https://www.ietf.org/mailman/listinfo/webpush).
 This will assure that the more people see your input in a timely fashion.
 
 2. If you have **editorial** suggestions (i.e., those that do not change the
