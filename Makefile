@@ -44,5 +44,5 @@ update-gh-pages:
 	git checkout gh-pages
 	cp /tmp/$(draft).html .
 	cp /tmp/$(draft).txt .
-	git commit -m"Updating gh-pages"
+	git commit -m"Updating gh-pages" -a
 	git checkout master
