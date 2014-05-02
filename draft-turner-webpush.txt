@@ -510,7 +510,8 @@ Internet-Draft                     SPP                          May 2014
 
 4.5.1.  AppServer -> WebPushServer
 
-   [todo] add data to this.
+   [todo] the push protocol needs to support data.  We also need to talk
+   about the lifetime of this data.
 
    The AppServer MUST make a HTTP _PUT_ request to the Endpoint received
    from the App.
@@ -552,7 +553,6 @@ Internet-Draft                     SPP                          May 2014
    updates list  REQUIRED
       The list contains one or more {"channelID": "id", "version": N }
       pairs.
-
 
 
 

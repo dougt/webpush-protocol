@@ -692,7 +692,7 @@
 <p id="rfc.section.4.4.2.p.1">The WebPushServer may reply with any data. The UserAgent is only concerned about the state of the connection. The WebPushServer may deliver pending notifications or other information. If there is no pending information to be sent, it is RECOMMENDED that the WebPushServer also reply with the string <samp>{}</samp>.</p>
 <h1 id="rfc.section.4.5"><a href="#rfc.section.4.5">4.5.</a> <a href="#notification" id="notification">Notification</a></h1>
 <h1 id="rfc.section.4.5.1"><a href="#rfc.section.4.5.1">4.5.1.</a> <a href="#appserver-webpushserver" id="appserver-webpushserver">AppServer -&gt; WebPushServer</a></h1>
-<p id="rfc.section.4.5.1.p.1">[todo] add data to this.</p>
+<p id="rfc.section.4.5.1.p.1">[todo] the push protocol needs to support data.  We also need to talk about the lifetime of this data.</p>
 <p id="rfc.section.4.5.1.p.2">The AppServer MUST make a HTTP <em>PUT</em> request to the Endpoint received from the App.</p>
 <p id="rfc.section.4.5.1.p.3">If no request body is present, the server MAY presume the version to be the current server UTC.</p>
 <p id="rfc.section.4.5.1.p.4">If the request body is present, the request MUST contain the string &#8220;version=N&#8221; and the Content-Type MUST be <samp>application/x-www-form-urlencoded</samp>.</p>
