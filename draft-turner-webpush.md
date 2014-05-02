@@ -395,7 +395,7 @@ RECOMMENDED that the WebPushServer also reply with the string `{}`.
 
 ### AppServer -> WebPushServer
 
-[todo] add data to this.
+[todo] the push protocol needs to support data.  We also need to talk about the lifetime of this data.
 
 The AppServer MUST make a HTTP *PUT* request to the Endpoint received from the
 App.
