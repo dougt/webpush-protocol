@@ -5,7 +5,8 @@ WebPush Draft Specifications
 This is the working area for the WebPush.
 
 WebPush Draft specification:
-* [Editor's copy](https://raw.githubusercontent.com/dougt/webpush-protocol/master/draft-turner-webpush.txt) (plain text)
+* [Editor's copy](http://dougt.github.io/webpush-protocol/draft-turner-webpush.txt) (plain text)
+* [Editor's copy](http://dougt.github.io/webpush-protocol/draft-turner-webpush.html) (html)
 
 Contributing
 ------------
