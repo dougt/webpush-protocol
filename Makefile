@@ -13,15 +13,6 @@ next := $(draft)-$(next_ver)
 
 .PHONY: latest submit clean
 
-publish:
-	cp $(draft).html /tmp/
-	cp $(draft).txt /tmp/
-	git checkout gh-pages
-	cp /tmp/$(draft).html .
-	cp /tmp/$(draft).txt .
-	git diff
-	git checkout master
-
 latest: $(draft).txt $(draft).html
 
 submit: $(next).txt
@@ -45,3 +36,13 @@ $(next).md: $(draft).md
 
 %.html: %.xml
 	$(xml2rfc) --html $< $@
+
+
+update-gh-pages:
+	cp $(draft).html /tmp/
+	cp $(draft).txt /tmp/
+	git checkout gh-pages
+	cp /tmp/$(draft).html .
+	cp /tmp/$(draft).txt .
+	git commit -m"Updating gh-pages"
+	git checkout master
